@@ -38,7 +38,6 @@ public class UserApplication {
 //            TimeUnit.SECONDS.sleep(1);
 //        }
     }
-
     @Bean
     public RabbitTemplate rabbitTemplate(CachingConnectionFactory connectionFactory) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
