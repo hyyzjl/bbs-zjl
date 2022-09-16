@@ -1,0 +1,102 @@
+server:
+  port: 8084
+spring:
+  application:
+    name: user-service
+  profiles:
+    active: dev
+  rabbitmq:
+    host: 124.223.21.122
+    port: 5672
+    virtual-host: /
+    username: admin
+    password: 123
+
+  redis:
+    host: r-bp196lixccndz4ohh9pd.redis.rds.aliyuncs.com
+    port: 6379
+    pool:
+      max-active: 8
+      max-wait: 1
+      max-idle: 8
+      min-idle: 0
+    timeout: 0
+    password: Zjl10101028
+  cloud:
+    sentinel:
+      transport:
+        dashboard: 127.0.0.1:8080
+      web-context-unify: false
+      #饥饿加载
+      eager: true
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        metadata:
+          version: v1      //自身版本
+          targetVersion: v1 //目标版本
+#        namespace: bbs //值为命名空间id  服务不能跨命名空间调用
+      #        cluster-name: bejing //同集群优先调用
+      config:
+        file-extension: yaml
+        refresh-enabled: true
+        enabled: true
+        server-addr: 127.0.0.1:8848
+        group: DEFAULT_GROUP
+#        namespace: 07447b75-1b34-4587-93ee-837fde975939
+  #        extension-configs:
+  #          - data-id: user-service-datasource
+  #            group: datasource
+  #            refresh: true
+  #  datasource:
+  #    driver-class-name: com.mysql.cj.jdbc.Driver
+  #    url: jdbc:mysql://rm-bp15h5a44683401mfso.mysql.rds.aliyuncs.com:3306/bbs-user?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+  #    username: zjlhyy
+  #spring:
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://rm-bp15h5a44683401mfso.mysql.rds.aliyuncs.com:3306/bbs-user?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+      username: zjlhyy
+      password: Zjl10101028
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+ribbon:
+  eager-load:
+    enabled: true
+feign:
+  client:
+    config:
+      default:
+        read-timeout: 4
+        connect-timeout: 4
+
+seata:
+  enabled: true
+  application-id: ${spring.application.name}
+  tx-service-group: ${spring.application.name}-group
+  enable-auto-data-source-proxy: true
+  service:
+    vgroup-mapping:
+      subject-service-group: SE
+    grouplist:
+      default: 127.0.0.1:8091
+  registry:
+    type: nacos
+    nacos: # tc
+      server-addr: 127.0.0.1:8848
+      #      namespace: ""
+      group: SEATA_GROUP
+      application: seata-server
+      cluster: SE
+  config:
+    type: nacos
+    nacos:
+      server-addr: 127.0.0.1:8848
+      #      namespace: ""
+      # 这是默认值
+      data-id: seataServer.properties
+      # 这是默认值
+      group: SEATA_GROUP
